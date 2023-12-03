@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Uniform Random Values Generator</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif, sans-serif;
+            text-align: center;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 0 auto;
+            margin-top: 50px; /* Spazio superiore */
+            margin-bottom: 50px; /* Spazio inferiore */
+        }
+
+        h1 {
+            text-align: left;
+        }
+
+        table, th, td {
+            border: 1.5px solid black;
+            padding: 7px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Uniform random values generator</h1>
+    <label for="N">N:</label>
+    <input type="number" id="N">
+    <label for="K">K:</label>
+    <input type="number" id="K">
+    <button onclick="generaDistribuisci()">Calculate</button>
+    <table id="resultTable">
+        <tr>
+            <th>Interval</th>
+            <th>Number of values</th>
+        </tr>
+    </table>
+    <script>
+        function generaDistribuisci() {
+            var N = parseInt(document.getElementById("N").value);
+            var K = parseInt(document.getElementById("K").value);
+            var resultTable = document.getElementById("resultTable");
+
+            var intervalCounts = new Array(K).fill(0);
+
+            for (var i = 0; i < N; i++) {
+                var randomValue = Math.random(); // Generates a random value between 0 and 1
+                var intervalIndex = Math.floor(randomValue * K); // Compute the value interval
+                intervalCounts[intervalIndex]++;
+            }
+
+            // Clear the table
+            resultTable.innerHTML = "<tr><th>Interval</th><th>Number of values</th></tr>";
+
+            for (var i = 0; i < K; i++) {
+                var intervalStart = (i / K).toFixed(2);
+                var intervalEnd = ((i + 1) / K).toFixed(2);
+                var intervalLabel = `${intervalStart}-${intervalEnd}`;
+                resultTable.innerHTML += `<tr><td>${intervalLabel}</td><td>${intervalCounts[i]}</td></tr>`;
+            }
+        }
+    </script>
+</body>
+
+</html>
