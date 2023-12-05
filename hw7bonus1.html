@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <title>SDE Simulation</title>
+</head>
+<body>
+    <h2>SDE Simulation</h2>
+
+    <div>
+        <label for="method">Simulation Method:</label>
+        <select id="method">
+            <option value="milstein">Milstein</option>
+            <option value="rungeKutta">Runge-Kutta</option>
+            <option value="heuns">Heun's</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="timeStep">Time Step:</label>
+        <input type="number" id="timeStep" value="0.01">
+    </div>
+
+    <div>
+        <label for="sigma">Sigma:</label>
+        <input type="number" id="sigma" value="0.4">
+    </div>
+
+    <div>
+        <label for="theta">Theta:</label>
+        <input type="number" id="theta" value="0.8">
+    </div>
+
+    <div>
+        <label for="mu">Mu:</label>
+        <input type="number" id="mu" value="0.8">
+    </div>
+
+    <div>
+        <label for="numSteps">Number of Attacks:</label>
+        <input type="number" id="numSteps" value="1000">
+    </div>
+
+    <div>
+        <label for="numGraphs">Number of Systems:</label>
+        <input type="number" id="numGraphs" value="100">
+    </div>
+
+    <button onclick="simulate()">Simulate</button>
+
+    <div id="plot"></div>
+
+    <script>
+        function simulate() {
+            const method = document.getElementById('method').value;
+            const timeStep = parseFloat(document.getElementById('timeStep').value);
+            const sigma = parseFloat(document.getElementById('sigma').value);
+            const theta = parseFloat(document.getElementById('theta').value);
+            const mu = parseFloat(document.getElementById('mu').value);
+            const numSteps = parseInt(document.getElementById('numSteps').value);
+            const numGraphs = parseInt(document.getElementById('numGraphs').value);
+
+            const data = [];
+            for (let i = 0; i < numGraphs; i++) {
+                const result = simulateSDE(method, timeStep, sigma, theta, mu, numSteps);
+                data.push({ x: result.time, y: result.values, type: 'scatter', mode: 'lines', name: `Graph ${i + 1}` });
+            }
+
+            const layout = { title: 'Stochastic Differential Equation Simulation' };
+            Plotly.newPlot('plot', data, layout);
+        }
+
+        function simulateSDE(method, timeStep, sigma, theta, mu, numSteps) {
+            const time = [0];
+            const values = [1]; // Initial value
+
+            for (let i = 1; i <= numSteps; i++) {
+                const dW = Math.sqrt(timeStep) * randomNormalDistribution();
+                const dX = sdeEquation(method, values[i - 1], sigma, theta, mu) * timeStep + sigma * dW;
+                const newValue = values[i - 1] + dX;
+
+                time.push(i * timeStep);
+                values.push(newValue);
+            }
+
+            return { time, values };
+        }
+
+        function sdeEquation(method, x, sigma, theta, mu) {
+    const noise = randomNormalDistribution(); // Random noise term
+
+    switch (method) {
+        case 'milstein':
+            // Improved equation for Milstein method
+            return mu * x + sigma * x * noise + 0.5 * sigma * sigma * x * (noise * noise - 1);
+        case 'rungeKutta':
+            // Improved equation for Runge-Kutta method
+            const k1 = theta * mu * x * noise;
+            const k2 = theta * mu * (x + 0.5 * k1) * randomNormalDistribution();
+            return k2;
+        case 'heuns':
+            // Improved equation for Heun's method
+            return sigma * x + 0.5 * sigma * sigma * x * noise;
+        default:
+            return 0;
+    }
+}
+
+
+        function randomNormalDistribution() {
+            let sum = 0;
+            for (let i = 0; i < 12; i++) {
+                sum += Math.random();
+            }
+            return sum - 6;
+        }
+    </script>
+</body>
+</html>
