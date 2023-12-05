@@ -70,7 +70,7 @@
     <select id="simSelect" class="form-control">
         <option value="score">Score Simulation</option>
         <option value="cumulative">Cumulative Frequency Simulation</option>
-        <option value="relative">Relative Frequency Simulation</option>
+        <option value="relative">Relative Freequency Simulation</option>
         <option value="normalized">Normalized Ratio Simulation</option>
     </select>
 
@@ -320,7 +320,7 @@
         function drawHistograms() {
 
             if (selectedSim === "score" || selectedSim === "cumulative") {
-                const barWidth = attacksCount / (5 * systemsCount) * scaleX * cartesianZoom;
+                const barWidth = attacksCount / (3*systemsCount) * scaleX * cartesianZoom;
                 let initialY = chartHeight;
                 if(selectedSim === "cumulative") {
                     initialY*=2;
@@ -328,7 +328,7 @@
 
                 ctx.fillStyle = 'rgba(255, 0, 255, 0.8)';
                 for (let i = 0; i < attacksCount / 2; i++) {
-                    const barHeight = attacksHalf[i] * scaleY * attacksCount / systemsCount * cartesianZoom;
+                    const barHeight = 2*attacksHalf[i] * scaleY * attacksCount / systemsCount * cartesianZoom;
                     const x = (attacksCount / 2) * scaleX * cartesianZoom + chartX + i * barWidth;
                     const y = initialY + chartY - barHeight;
                     ctx.fillRect(x, y, barWidth, barHeight);
@@ -336,7 +336,7 @@
 
                 ctx.fillStyle = 'rgba(0, 0, 255, 0.8)';
                 for (let i = 0; i < attacksCount; i++) {
-                    const barHeight = attacks[i] * scaleY * attacksCount / systemsCount * cartesianZoom;
+                    const barHeight = 2*attacks[i] * scaleY * attacksCount / systemsCount * cartesianZoom;
                     const x = (attacksCount) * scaleX * cartesianZoom + chartX + i * barWidth;
                     const y = initialY + chartY - barHeight;
                     ctx.fillRect(x, y, barWidth, barHeight);
