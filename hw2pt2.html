@@ -42,25 +42,25 @@
     </table>
     <script>
         function generaDistribuisci() {
-            var N = parseInt(document.getElementById("N").value);
-            var K = parseInt(document.getElementById("K").value);
-            var resultTable = document.getElementById("resultTable");
+            let N = parseInt(document.getElementById("N").value);
+            let K = parseInt(document.getElementById("K").value);
+            let resultTable = document.getElementById("resultTable");
 
-            var intervalCounts = new Array(K).fill(0);
+            let intervalCounts = new Array(K).fill(0);
 
-            for (var i = 0; i < N; i++) {
-                var randomValue = Math.random(); // Generates a random value between 0 and 1
-                var intervalIndex = Math.floor(randomValue * K); // Compute the value interval
+            for (let i = 0; i < N; i++) {
+                let randomValue = Math.random(); // Generates a random value between 0 and 1
+                let intervalIndex = Math.floor(randomValue * K); // Compute the value interval
                 intervalCounts[intervalIndex]++;
             }
 
             // Clear the table
             resultTable.innerHTML = "<tr><th>Interval</th><th>Number of values</th></tr>";
 
-            for (var i = 0; i < K; i++) {
-                var intervalStart = (i / K).toFixed(2);
-                var intervalEnd = ((i + 1) / K).toFixed(2);
-                var intervalLabel = `${intervalStart}-${intervalEnd}`;
+            for (let i = 0; i < K; i++) {
+                let intervalStart = (i / K).toFixed(2);
+                let intervalEnd = ((i + 1) / K).toFixed(2);
+                let intervalLabel = `${intervalStart}-${intervalEnd}`;
                 resultTable.innerHTML += `<tr><td>${intervalLabel}</td><td>${intervalCounts[i]}</td></tr>`;
             }
         }
